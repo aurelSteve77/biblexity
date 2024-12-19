@@ -1,0 +1,6 @@
+biblexity.egg-info
+.chainlit
+configs/.env
+*.idea/*
+data/
+*__pycache__*
