@@ -1,0 +1,8 @@
+# Contexte
+{% for doc in documents %}
+### Source {{doc['id']}}
+### Content: {{doc['text']}}
+{% endfor %}
+
+# Question
+{{question}}

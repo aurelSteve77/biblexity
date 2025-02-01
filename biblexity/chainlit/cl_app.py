@@ -8,31 +8,23 @@ from typing import cast
 import chainlit as cl
 from openai import base_url, api_key
 
+from biblexity.core.session import session_manager
+
+
 
 @cl.on_message
 async def main(message: cl.Message):
-    runnable = cast(Runnable, cl.user_session.get("runnable"))  # type: Runnable
-    msg = cl.Message(content="")
-    async for chunk in runnable.astream(
-            {"question": message.content},
-            config=RunnableConfig(callbacks=[cl.LangchainCallbackHandler()]),
-    ):
-        await msg.stream_token(chunk)
+    session = cl.user_session.get('session')
+    response = session.ask_question(message.content)
+
+    elements = [
+        cl.Text(name='verse', content=verse.render(), display='page') for verse in response.relevant_verses
+    ]
+
+    msg = cl.Message(content=response.response, elements=elements, metadata=response.model_dump())
     await msg.send()
 
 @cl.on_chat_start
-async def main():
-    model = ChatOpenAI(base_url='http://localhost:1234/v1', api_key='empty', streaming=True)
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            (
-                "system",
-                "You're a very knowledgeable historian who provides accurate and eloquent answers to historical questions.",
-            ),
-            ("human", "{question}"),
-        ]
-    )
-    runnable = prompt | model | StrOutputParser()
-    cl.user_session.set("runnable", runnable)
-
-    await cl.Message(content="Hello World").send()
+async def init():
+    session = session_manager.create_session()
+    cl.user_session.set("session", session)

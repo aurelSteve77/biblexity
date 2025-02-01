@@ -46,6 +46,13 @@ class Configuration(metaclass=SingletonMeta):
         self.embedding_url = self.get_var(section='models', var_name='embedding_url', type=str)
         self.embedding_model = self.get_var(section='models', var_name='embedding_model', type=str)
 
+        # data
+        self.bible_data_path = self.get_var(section='data', var_name='bible_data_path', type=str)
+
+        # persistant chroma dir
+        self.persistant_chroma_dir = self.get_var(section='db', var_name='persistant_chroma_dir', type=str)
+
+
 
     def get_var(self, section: str, var_name: str, default_value=None, type = str):
         # get the variables

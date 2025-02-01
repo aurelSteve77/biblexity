@@ -4,3 +4,5 @@ configs/.env
 *.idea/*
 data/
 *__pycache__*
+notebooks/*
+.files/*

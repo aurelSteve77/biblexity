@@ -39,7 +39,22 @@ dependencies = [
     "chromadb==0.5.23",
     "langchain-chroma>=0.1.2",
     "langchain-ollama==0.2.2",
-    "ollama==0.4.4"
+    "ollama==0.4.4",
+    "pandas==2.2.3",
+    "jinja2==3.1.4"
 ]
 
 dynamic = ["version"]
+
+[project.optional-dependencies]
+finetuning = [
+    "datasets==3.2.0",
+    "torch==2.5.1+cu12",
+    "tensorboard==2.18.0",
+    "sentence-transformers==3.3.1",
+    "transformers==4.47.1",
+    "einops"
+]
+
+[project.scripts]
+biblexity = "biblexity.api.main:main"
